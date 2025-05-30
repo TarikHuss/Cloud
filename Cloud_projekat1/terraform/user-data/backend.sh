@@ -18,7 +18,14 @@ yum install git postgresql -y
 # Kloniranje repozitorija
 cd /home/ec2-user
 git clone ${github_repo} app
-cd app/Cloud_projekat1
+cd app/Cloud_projekat1/server
+
+# Proverite da li postoji app.py
+if [ ! -f "app.py" ]; then
+    echo "ERROR: app.py not found!" >> /var/log/backend-deployment.log
+    ls -la >> /var/log/backend-deployment.log
+    exit 1
+fi
 
 # Čekanje da RDS bude spreman
 echo "Waiting for database to be ready..."
@@ -32,7 +39,6 @@ for i in {1..30}; do
 done
 
 # Build backend kontejnera
-cd server
 docker build -t backend .
 
 # Pokretanje backend kontejnera sa RDS kredencijalima
@@ -58,3 +64,4 @@ with app.app_context():
 
 # Log fajl za debugging
 echo "Backend deployment completed at $(date)" >> /var/log/backend-deployment.log
+docker ps >> /var/log/backend-deployment.log

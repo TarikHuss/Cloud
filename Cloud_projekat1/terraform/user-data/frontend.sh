@@ -18,10 +18,16 @@ yum install git -y
 # Kloniranje repozitorija
 cd /home/ec2-user
 git clone ${github_repo} app
-cd app/Cloud_projekat1
+cd app/Cloud_projekat1/client
+
+# Proverite da li postoji package.json
+if [ ! -f "package.json" ]; then
+    echo "ERROR: package.json not found!" >> /var/log/frontend-deployment.log
+    ls -la >> /var/log/frontend-deployment.log
+    exit 1
+fi
 
 # Build i pokretanje frontend kontejnera
-cd client
 docker build -t frontend .
 
 # Pokretanje frontend kontejnera
@@ -35,3 +41,4 @@ docker run -d \
 
 # Log fajl za debugging
 echo "Frontend deployment completed at $(date)" >> /var/log/frontend-deployment.log
+docker ps >> /var/log/frontend-deployment.log
