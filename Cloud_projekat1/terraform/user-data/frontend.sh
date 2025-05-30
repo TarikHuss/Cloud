@@ -18,7 +18,7 @@ yum install git -y
 # Kloniranje repozitorija
 cd /home/ec2-user
 git clone ${github_repo} app
-cd app/Cloud_projekat1/client
+cd app/Cloud_projekat1/flask-vue-crud/client
 
 # Proverite da li postoji package.json
 if [ ! -f "package.json" ]; then

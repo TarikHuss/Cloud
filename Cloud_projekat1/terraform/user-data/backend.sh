@@ -18,7 +18,7 @@ yum install git postgresql -y
 # Kloniranje repozitorija
 cd /home/ec2-user
 git clone ${github_repo} app
-cd app/Cloud_projekat1/server
+cd app/Cloud_projekat1/flask-vue-crud/server
 
 # Proverite da li postoji app.py
 if [ ! -f "app.py" ]; then
