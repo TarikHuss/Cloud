@@ -6,11 +6,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Boolean, Column, String
 
 # Konfiguracija
-db_url = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///books.db')
+# Podrška za Heroku PostgreSQL URL format
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # Inicijalizacija aplikacije
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -107,5 +110,10 @@ def single_book(book_id):
     
     return jsonify(response_object)
 
+@app.route('/api/health')
+def health():
+	return jsonify({'status': 'healthy'}), 200
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5000)

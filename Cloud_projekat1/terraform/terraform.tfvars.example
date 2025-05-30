@@ -1,0 +1,21 @@
+# Kopirajte ovaj fajl u terraform.tfvars i popunite sa vašim vrednostima
+
+aws_region   = "us-east-1"  # N. Virginia
+project_name = "flask-vue-books"
+
+# VAŽNO: Zamenite sa vašim GitHub repozitorijumom
+github_repo = "https://github.com/YOUR_USERNAME/YOUR_REPO.git"
+
+# Database kredencijali - OBAVEZNO promenite password!
+db_name     = "books"
+db_username = "postgres"
+db_password = "VašSiguranPassword123!"  # Minimum 8 karaktera
+
+# EC2 instance type (t2.micro je free tier eligible)
+instance_type = "t2.micro"
+
+# Opciono: Ako imate EC2 key pair za SSH pristup
+# key_name = "your-key-pair-name"
+
+# IP adrese koje mogu pristupiti aplikaciji
+allowed_ips = ["0.0.0.0/0"]
