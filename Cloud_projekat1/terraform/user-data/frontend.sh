@@ -20,12 +20,14 @@ cd /home/ec2-user
 git clone ${github_repo} app
 cd app/Cloud_projekat1/flask-vue-crud/client
 
-# Proverite da li postoji package.json
-if [ ! -f "package.json" ]; then
-    echo "ERROR: package.json not found!" >> /var/log/frontend-deployment.log
-    ls -la >> /var/log/frontend-deployment.log
-    exit 1
-fi
+# Automatski zameni localhost:5001 sa ALB URL-om
+echo "Replacing localhost URLs with ALB URL: ${backend_url}" >> /var/log/frontend-deployment.log
+find src/ -name "*.vue" -exec sed -i "s|http://localhost:5001|${backend_url}|g" {} \;
+find src/ -name "*.js" -exec sed -i "s|http://localhost:5001|${backend_url}|g" {} \;
+
+# Proveri da li je zamena uspešna
+echo "URLs after replacement:" >> /var/log/frontend-deployment.log
+grep -r "http://" src/ >> /var/log/frontend-deployment.log
 
 # Build i pokretanje frontend kontejnera
 docker build -t frontend .
@@ -35,10 +37,13 @@ docker run -d \
   --name frontend \
   --restart unless-stopped \
   -p 8080:5173 \
-  -e VUE_APP_API_URL=${backend_url} \
-  -e NODE_ENV=production \
   frontend
+
+# Čekaj da se kontejner pokrene
+sleep 10
+
+# Proveri status
+docker ps >> /var/log/frontend-deployment.log
 
 # Log fajl za debugging
 echo "Frontend deployment completed at $(date)" >> /var/log/frontend-deployment.log
-docker ps >> /var/log/frontend-deployment.log

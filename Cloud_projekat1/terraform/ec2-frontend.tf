@@ -9,9 +9,9 @@ resource "aws_instance" "frontend" {
   
   key_name = var.key_name != "" ? var.key_name : null
   
-  user_data = templatefile("${path.module}/user-data/frontend.sh", {
-    github_repo = var.github_repo
-    backend_url = "http://${aws_lb.main.dns_name}/api"
+user_data = templatefile("${path.module}/user-data/frontend.sh", {
+  github_repo = var.github_repo
+  backend_url = "http://${aws_lb.main.dns_name}"  
   })
   
   root_block_device {
