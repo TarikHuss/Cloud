@@ -6,21 +6,22 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-
-# Set backend URL during build
-ARG VUE_APP_API_URL
-ENV VUE_APP_API_URL=$VUE_APP_API_URL
-
 RUN npm run build
 
-FROM node:14-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-RUN npm install -g serve
-
-COPY --from=builder /app/dist ./dist
+RUN echo 'server { \
+    listen 8080; \
+    server_name localhost; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 
-CMD ["serve", "-s", "dist", "-l", "8080"]
+CMD ["nginx", "-g", "daemon off;"]
