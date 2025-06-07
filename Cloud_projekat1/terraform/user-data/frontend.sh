@@ -22,15 +22,17 @@ cd app/Cloud_projekat1/flask-vue-crud/client
 echo "Replacing localhost URLs with ALB URL: ${backend_url}" >> /var/log/frontend-deployment.log
 find src/ -name "*.vue" -exec sed -i "s|http://localhost:5001|${backend_url}|g" {} \;
 
-# Build sa production Dockerfile
-docker build -f Dockerfile.prod -t frontend .
+# Build sa standardnim Dockerfile
+echo "Building Docker image..." >> /var/log/frontend-deployment.log
+docker build -t frontend . >> /var/log/frontend-deployment.log 2>&1
 
 # Pokreni kontejner
+echo "Starting container..." >> /var/log/frontend-deployment.log
 docker run -d \
   --name frontend \
   --restart unless-stopped \
   -p 8080:8080 \
-  frontend
+  frontend >> /var/log/frontend-deployment.log 2>&1
 
 echo "Frontend deployment completed at $(date)" >> /var/log/frontend-deployment.log
 docker ps >> /var/log/frontend-deployment.log
