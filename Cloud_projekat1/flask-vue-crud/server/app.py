@@ -61,7 +61,7 @@ def create_tables():
 # Route za ping
 @app.route('/ping', methods=['GET'])
 def ping_pong():
-    return jsonify('pong, super!')
+    return jsonify('pong, super!'), 200
 
 # Route za knjige
 @app.route('/books', methods=['GET', 'POST'])
