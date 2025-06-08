@@ -5,7 +5,6 @@
 .terraform.lock.hcl
 
 # Variable files with sensitive data
-terraform.tfvars
 *.auto.tfvars
 
 # OS files
