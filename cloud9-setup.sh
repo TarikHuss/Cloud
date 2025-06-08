@@ -13,14 +13,14 @@ echo "✓ Git configured"
 
 # 2. Instalacija Terraform-a
 if ! command -v terraform &> /dev/null; then
-    echo "3. Installing Terraform..."
+    echo "2. Installing Terraform..."
     wget -q https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
     unzip -q terraform_1.5.7_linux_amd64.zip
     sudo mv terraform /usr/local/bin/
     rm terraform_1.5.7_linux_amd64.zip
     echo "✓ Terraform installed"
 else
-    echo "3. Terraform already installed"
+    echo "2. Terraform already installed"
     terraform --version
 fi
 
@@ -58,8 +58,6 @@ echo ""
 echo "==================================="
 echo "Setup completed successfully!"
 echo "==================================="
-echo ""
-echo "You are now in: $(pwd)"
 echo ""
 echo "Next steps:"
 echo "1. Run: terraform init"
