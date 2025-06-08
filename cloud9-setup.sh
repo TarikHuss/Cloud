@@ -11,18 +11,7 @@ git config --global user.name "TarikHuss"
 git config --global user.email "tarikhusejnovic0@gmail.com"
 echo "✓ Git configured"
 
-# 2. Proveri da li repozitorij već postoji
-if [ ! -d "Cloud" ]; then
-    echo "2. Cloning repository..."
-    git clone https://github.com/TarikHuss/Cloud.git
-    echo "✓ Repository cloned"
-else
-    echo "2. Repository already exists, pulling latest changes..."
-    cd Cloud && git pull && cd ..
-    echo "✓ Repository updated"
-fi
-
-# 3. Instalacija Terraform-a
+# 2. Instalacija Terraform-a
 if ! command -v terraform &> /dev/null; then
     echo "3. Installing Terraform..."
     wget -q https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
@@ -35,10 +24,10 @@ else
     terraform --version
 fi
 
-# 4. Navigacija do terraform foldera
-cd Cloud/Cloud_projekat1/terraform
+# 3. Navigacija do terraform foldera
+cd Cloud_projekat1/terraform
 
-# 5. Kreiranje EC2 key pair-a
+# 4. Kreiranje EC2 key pair-a
 echo "4. Creating EC2 key pair..."
 if [ ! -f "tarik-app.pem" ]; then
     aws ec2 create-key-pair --key-name tarik-app --query 'KeyMaterial' --output text > tarik-app.pem
@@ -48,7 +37,7 @@ else
     echo "✓ Key pair already exists"
 fi
 
-# 6. Kreiranje terraform.tfvars ako ne postoji
+# 5. Kreiranje terraform.tfvars ako ne postoji
 if [ ! -f "terraform.tfvars" ]; then
     echo "5. Creating terraform.tfvars..."
     cat > terraform.tfvars << 'TFVARS'
